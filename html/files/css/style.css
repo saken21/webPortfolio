@@ -46,6 +46,8 @@
 			}
 			
 			#works ul li .name {
+				overflow:hidden;
+				height:26px;
 				margin-bottom:10px;
 				font-size:16px;
 				font-weight:bold;
@@ -53,12 +55,12 @@
 			
 			#works ul li .image {
 				overflow:hidden;
-				height:100px;
+				height:140px;
 			}
 			
 			#works ul li .note {
 				overflow-y:scroll;
-				height:100px;
+				height:60px;
 				padding:10px 0;
 				border-top:1px dotted #aaa;
 				border-bottom:1px dotted #aaa;
