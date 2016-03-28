@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+@import "common/layout.css";
+
+/*-------------------------------------------------------------------------
+	Works
+/*-----------------------------------------------------------------------*/
+#works {
+	padding:110px 20px 0 20px;
+	background:#fff;
+}
+
+	#works ul {
+		padding:1%;
+		background:#f0f0f0;
+	}
+	
+		#works ul li {
+			float:left;
+			width:23%;
+			margin:1%;
+			background:#fff;
+		}
+		
+			#works ul li article {
+				margin:10px;
+			}
+		
+			#works ul li img {
+				width:100%;
+			}
+			
+			#works ul li .client {
+				display:inline-block;
+				padding:2px 5px;
+				background:#329fba;
+				color:#fff;
+				font-size:12px;
+			}
+			
+			#works ul li .name,
+			#works ul li .image,
+			#works ul li .note {
+				margin-bottom:10px;
+			}
+			
+			#works ul li .name {
+				margin-bottom:10px;
+				font-size:16px;
+				font-weight:bold;
+			}
+			
+			#works ul li .image {
+				overflow:hidden;
+				height:100px;
+			}
+			
+			#works ul li .note {
+				overflow-y:scroll;
+				height:100px;
+				padding:10px 0;
+				border-top:1px dotted #aaa;
+				border-bottom:1px dotted #aaa;
+				font-size:12px;
+			}
+			
+			#works ul li .tag {
+				overflow-y:scroll;
+				height:50px;
+			}
+			
+				#works ul li .tag span {
+					display:inline-block;
+					margin:1px;
+					padding:2px 5px;
+					border-radius:3px;
+					background:#aaa;
+					color:#fff;
+					font-size:11px;
+				}
+				
+@media screen and (max-width:960px) {
+	
+	#works {
+		padding-top:240px;
+	}
+	
+	#works ul li {
+		float:none;
+		width:94%;
+		margin:15px 3% 15px 3%;
+	}
+	
+}
