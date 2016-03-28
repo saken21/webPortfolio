@@ -10,8 +10,6 @@ class Html {
 	========================================================================== */
 	public static function get(data:DataArray):String {
 		
-		trace(data);
-		
 		var html:String = '<ul>';
 		
 		for (i in 0...data.length) {
@@ -69,7 +67,7 @@ class Html {
 			var tag:String = tags[i];
 			if (tag.length == 0) continue;
 			
-			html += '<span>' + tag + '</span>';
+			html += '<span class="tag-anchor">' + tag + '</span>';
 		
 		}
 		

@@ -91,13 +91,14 @@ body {
 		margin:0 20px;
 	}
 
-	#header h1 {
+	#header .title {
 		float:left;
 		color:#000;
 		font-size:18px;
 		font-weight:bold;
 		line-height:36px;
 		letter-spacing:1px;
+		cursor:pointer;
 	}
 		
 	#searchbox {
@@ -113,6 +114,10 @@ body {
 			#searchbox ul li {
 				float:left;
 			}
+			
+		#searchbox .submit {
+			margin-right:0;
+		}
 		
 		#searchbox .from:after {
 			display:inline-block;
@@ -123,7 +128,7 @@ body {
 		
 @media screen and (max-width:960px) {
 	
-	#header h1 {
+	#header .title {
 		margin-bottom:10px;
 		font-size:14px;
 	}

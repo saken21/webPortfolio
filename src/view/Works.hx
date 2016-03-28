@@ -13,7 +13,7 @@ class Works {
 	========================================================================== */
 	public static function init():Void {
 		
-		_jParent = new JQuery('#works');
+		_jParent = new JQuery('#works').on('click',onClick);
 		Lightbox.init('.lightbox');
 		
 	}
@@ -35,5 +35,18 @@ class Works {
 			_jParent.html('検索結果：0件');
 
 		}
+	
+	/* =======================================================================
+	On Click
+	========================================================================== */
+	private static function onClick(event:JqEvent):Void {
+		
+		var jTarget:JQuery = new JQuery(event.target);
+		
+		if (jTarget.hasClass('tag-anchor')) {
+			Searchbox.searchKeyword(jTarget.text());
+		}
+		
+	}
 
 }

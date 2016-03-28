@@ -107,6 +107,7 @@ var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	new js.JQuery("document").ready(function(event) {
+		view.Header.init();
 		view.Searchbox.init();
 		view.Works.init();
 	});
@@ -576,13 +577,22 @@ utils.Data.load = function(keyword,from,to) {
 	});
 };
 utils.Data.onLoaded = function(data) {
+	data.reverse();
 	if(data.length > 0) view.Works.setHTML(data); else view.Works.setEmptyHTML();
 };
 var view = {};
+view.Header = function() { };
+view.Header.__name__ = true;
+view.Header.init = function() {
+	view.Header._jParent = new js.JQuery("#header").on("click",view.Header.onClick);
+};
+view.Header.onClick = function(event) {
+	var jTarget = new js.JQuery(event.target);
+	if(jTarget.hasClass("title")) view.Searchbox.reset();
+};
 view.Html = function() { };
 view.Html.__name__ = true;
 view.Html.get = function(data) {
-	console.log(data);
 	var html = "<ul>";
 	var _g1 = 0;
 	var _g = data.length;
@@ -609,7 +619,7 @@ view.Html.getTags = function(tags) {
 		var i = _g1++;
 		var tag = tags[i];
 		if(tag.length == 0) continue;
-		html += "<span>" + tag + "</span>";
+		html += "<span class=\"tag-anchor\">" + tag + "</span>";
 	}
 	return html;
 };
@@ -621,11 +631,19 @@ view.Searchbox.init = function() {
 	view.Searchbox._jFrom = view.Searchbox._jParent.find(".from").find("input");
 	view.Searchbox._jTo = view.Searchbox._jParent.find(".to").find("input");
 	view.Searchbox._jSubmit = view.Searchbox._jParent.find(".submit").find("button");
-	view.Searchbox.setYear(new Date().getFullYear());
-	view.Searchbox._jSubmit.on("click",view.Searchbox.submit).trigger("click");
+	view.Searchbox._jSubmit.on("click",view.Searchbox.submit);
+	view.Searchbox.reset();
 };
 view.Searchbox.reload = function() {
 	view.Searchbox._jSubmit.trigger("click");
+};
+view.Searchbox.reset = function() {
+	view.Searchbox.setYear(new Date().getFullYear());
+	view.Searchbox.searchKeyword("");
+};
+view.Searchbox.searchKeyword = function(keyword) {
+	view.Searchbox._jKeyword.prop("value",keyword);
+	view.Searchbox.reload();
 };
 view.Searchbox.setYear = function(year) {
 	view.Searchbox._jFrom.prop("value",view.Searchbox.getFormattedDate(2012,7));
@@ -647,7 +665,7 @@ view.Searchbox.getFormattedDate = function(year,month) {
 view.Works = function() { };
 view.Works.__name__ = true;
 view.Works.init = function() {
-	view.Works._jParent = new js.JQuery("#works");
+	view.Works._jParent = new js.JQuery("#works").on("click",view.Works.onClick);
 	jp.saken.ui.Lightbox.init(".lightbox");
 };
 view.Works.setHTML = function(data) {
@@ -655,6 +673,10 @@ view.Works.setHTML = function(data) {
 };
 view.Works.setEmptyHTML = function() {
 	view.Works._jParent.html("検索結果：0件");
+};
+view.Works.onClick = function(event) {
+	var jTarget = new js.JQuery(event.target);
+	if(jTarget.hasClass("tag-anchor")) view.Searchbox.searchKeyword(jTarget.text());
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;

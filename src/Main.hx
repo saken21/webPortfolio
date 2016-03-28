@@ -17,6 +17,7 @@
 package;
 
 import js.JQuery;
+import view.Header;
 import view.Searchbox;
 import view.Works;
 import utils.Data;
@@ -27,7 +28,9 @@ class Main {
 		
 		new JQuery('document').ready(function(event:JqEvent):Void {
 			
+			Header.init();
 			Searchbox.init();
+			
 			Works.init();
 			
 		});

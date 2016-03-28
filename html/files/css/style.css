@@ -6,6 +6,7 @@
 	Works
 /*-----------------------------------------------------------------------*/
 #works {
+	margin-bottom:20px;
 	padding:110px 20px 0 20px;
 	background:#fff;
 }
@@ -69,7 +70,7 @@
 				height:50px;
 			}
 			
-				#works ul li .tag span {
+				#works ul li .tag .tag-anchor {
 					display:inline-block;
 					margin:1px;
 					padding:2px 5px;
@@ -77,6 +78,11 @@
 					background:#aaa;
 					color:#fff;
 					font-size:11px;
+					cursor:pointer;
+				}
+				
+				#works ul li .tag .tag-anchor:hover {
+					background-color:#329fba;
 				}
 				
 @media screen and (max-width:960px) {

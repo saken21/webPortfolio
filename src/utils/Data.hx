@@ -45,6 +45,8 @@ class Data {
 	========================================================================== */
 	private static function onLoaded(data:DataArray):Void {
 		
+		data.reverse();
+		
 		if (data.length > 0) Works.setHTML(data);
 		else Works.setEmptyHTML();
 		
