@@ -5,7 +5,7 @@
 *
 * Author : KENTA SAKATA
 * Since  : 2016/03/05
-* Update : 2016/03/22
+* Update : 2016/03/29
 *
 * Licensed under the MIT License
 * Copyright (c) Kenta Sakata
@@ -17,6 +17,7 @@
 package;
 
 import js.JQuery;
+import view.All;
 import view.Header;
 import view.Searchbox;
 import view.Works;
@@ -28,10 +29,11 @@ class Main {
 		
 		new JQuery('document').ready(function(event:JqEvent):Void {
 			
+			Works.init();
+			
+			All.init();
 			Header.init();
 			Searchbox.init();
-			
-			Works.init();
 			
 		});
 		

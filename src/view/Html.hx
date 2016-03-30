@@ -34,7 +34,10 @@ class Html {
 		}
 		
 		if (info.image.length > 0) {
-			image = '<a href="' + info.image + '" class="lightbox"><img src="' + info.image + '"></a>';
+			
+			var imageSRC:String = info.image;
+			image = '<a href="' + imageSRC + '" class="lightbox"><img src="' + imageSRC + '"></a>';
+			
 		}
 		
 		html += '

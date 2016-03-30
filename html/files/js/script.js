@@ -107,9 +107,10 @@ var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	new js.JQuery("document").ready(function(event) {
+		view.Works.init();
+		view.All.init();
 		view.Header.init();
 		view.Searchbox.init();
-		view.Works.init();
 	});
 };
 var IMap = function() { };
@@ -234,6 +235,22 @@ haxe.Http.prototype = {
 	,onError: function(msg) {
 	}
 	,onStatus: function(status) {
+	}
+};
+haxe.Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+haxe.Timer.__name__ = true;
+haxe.Timer.prototype = {
+	stop: function() {
+		if(this.id == null) return;
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
 	}
 };
 haxe.ds = {};
@@ -475,6 +492,21 @@ jp.saken.utils.Handy.getMap = function(array) {
 jp.saken.utils.Handy.getIsImageSource = function(string) {
 	return new EReg("data:image","").match(string);
 };
+jp.saken.utils.Handy.timer = function(func,time) {
+	if(time == null) time = 1000;
+	var timer = new haxe.Timer(time);
+	timer.run = function() {
+		timer.stop();
+		func();
+	};
+};
+jp.saken.utils.Handy.prototype = {
+	getRoundNumber: function(val,digits) {
+		var m = Math.pow(10,digits);
+		var d = Math.pow(.1,digits);
+		return Math.floor(val * m) * d;
+	}
+};
 js.Boot = function() { };
 js.Boot.__name__ = true;
 js.Boot.__string_rec = function(o,s) {
@@ -581,10 +613,24 @@ utils.Data.onLoaded = function(data) {
 	if(data.length > 0) view.Works.setHTML(data); else view.Works.setEmptyHTML();
 };
 var view = {};
+view.All = function() { };
+view.All.__name__ = true;
+view.All.init = function() {
+	view.All._jParent = new js.JQuery("#all");
+};
+view.All.showLoading = function() {
+	view.All._jParent.removeClass("loaded");
+};
+view.All.hideLoading = function() {
+	view.All._jParent.addClass("loaded");
+};
 view.Header = function() { };
 view.Header.__name__ = true;
 view.Header.init = function() {
 	view.Header._jParent = new js.JQuery("#header").on("click",view.Header.onClick);
+};
+view.Header.getHeight = function() {
+	return view.Header._jParent.outerHeight();
 };
 view.Header.onClick = function(event) {
 	var jTarget = new js.JQuery(event.target);
@@ -607,7 +653,10 @@ view.Html.getWork = function(info) {
 	var href = "";
 	var image = "";
 	if(info.url.length > 0) href = " href=\"" + Std.string(info.url) + "\" class=\"link\" target=\"_blank\"";
-	if(info.image.length > 0) image = "<a href=\"" + Std.string(info.image) + "\" class=\"lightbox\"><img src=\"" + Std.string(info.image) + "\"></a>";
+	if(info.image.length > 0) {
+		var imageSRC = info.image;
+		image = "<a href=\"" + imageSRC + "\" class=\"lightbox\"><img src=\"" + imageSRC + "\"></a>";
+	}
 	html += "\n\t\t\n\t\t\t<p class=\"client\">" + Std.string(info.client) + " 様</p>\n\t\t\t<article>\n\t\t\t\t<p class=\"name\">\n\t\t\t\t\t<a" + href + ">" + Std.string(info.name) + "</a>\n\t\t\t\t</p>\n\t\t\t\t<p class=\"image\">" + image + "</p>\n\t\t\t\t<p class=\"note\">" + Std.string(info.note) + "</p>\n\t\t\t\t<p class=\"tag\">" + view.Html.getTags(info.tag.split(",")) + "</p>\n\t\t\t</article>\n\t\t\n\t\t";
 	return html + "</li>";
 };
@@ -638,18 +687,19 @@ view.Searchbox.reload = function() {
 	view.Searchbox._jSubmit.trigger("click");
 };
 view.Searchbox.reset = function() {
-	view.Searchbox.setYear(new Date().getFullYear());
+	view.Searchbox.setDefaultDate(new Date());
 	view.Searchbox.searchKeyword("");
 };
 view.Searchbox.searchKeyword = function(keyword) {
 	view.Searchbox._jKeyword.prop("value",keyword);
 	view.Searchbox.reload();
 };
-view.Searchbox.setYear = function(year) {
+view.Searchbox.setDefaultDate = function(date) {
 	view.Searchbox._jFrom.prop("value",view.Searchbox.getFormattedDate(2012,7));
-	view.Searchbox._jTo.prop("value",view.Searchbox.getFormattedDate(year,12));
+	view.Searchbox._jTo.prop("value",view.Searchbox.getFormattedDate(date.getFullYear(),date.getMonth() + 1));
 };
 view.Searchbox.submit = function(event) {
+	view.Works.removeHTML();
 	var keyword = view.Searchbox._jKeyword.prop("value");
 	var from = view.Searchbox.getDateNumber(view.Searchbox._jFrom.prop("value"));
 	var to = view.Searchbox.getDateNumber(view.Searchbox._jTo.prop("value"));
@@ -666,17 +716,26 @@ view.Works = function() { };
 view.Works.__name__ = true;
 view.Works.init = function() {
 	view.Works._jParent = new js.JQuery("#works").on("click",view.Works.onClick);
+	jp.saken.utils.Dom.jWindow.on("resize",view.Works.onResize);
 	jp.saken.ui.Lightbox.init(".lightbox");
 };
+view.Works.removeHTML = function() {
+	view.All.showLoading();
+	view.Works._jParent.empty();
+};
 view.Works.setHTML = function(data) {
-	view.Works._jParent.html(view.Html.get(data));
+	view.Works._jParent.hide().html(view.Html.get(data)).delay(300).fadeIn(600,view.All.hideLoading);
 };
 view.Works.setEmptyHTML = function() {
+	view.All.hideLoading();
 	view.Works._jParent.html("検索結果：0件");
 };
 view.Works.onClick = function(event) {
 	var jTarget = new js.JQuery(event.target);
 	if(jTarget.hasClass("tag-anchor")) view.Searchbox.searchKeyword(jTarget.text());
+};
+view.Works.onResize = function(event) {
+	view.Works._jParent.css({ paddingTop : view.Header.getHeight() + 20});
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;

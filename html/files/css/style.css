@@ -65,6 +65,7 @@
 				border-top:1px dotted #aaa;
 				border-bottom:1px dotted #aaa;
 				font-size:12px;
+				text-align:justify;
 			}
 			
 			#works ul li .tag {

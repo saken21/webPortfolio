@@ -67,8 +67,12 @@ body {
 
 #all {
 	position:relative;
-	background:#fff;
+	background:#fff url(../../img/loading.png) no-repeat center center;
 	z-index:10;
+}
+
+#all.loaded {
+	background-image:none;
 }
 
 /*-------------------------------------------------------------------------

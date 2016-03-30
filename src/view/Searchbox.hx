@@ -42,7 +42,7 @@ class Searchbox {
 		========================================================================== */
 		public static function reset():Void {
 			
-			setYear(Date.now().getFullYear());
+			setDefaultDate(Date.now());
 			searchKeyword('');
 
 		}
@@ -58,12 +58,12 @@ class Searchbox {
 		}
 	
 	/* =======================================================================
-	Set Year
+	Set Default Date
 	========================================================================== */
-	private static function setYear(year:Int):Void {
+	private static function setDefaultDate(date:Date):Void {
 		
 		_jFrom.prop('value',getFormattedDate(2012,7));
-		_jTo.prop('value',getFormattedDate(year,12));
+		_jTo.prop('value',getFormattedDate(date.getFullYear(),date.getMonth() + 1));
 		
 	}
 	
@@ -71,6 +71,8 @@ class Searchbox {
 	Submit
 	========================================================================== */
 	private static function submit(event:JqEvent):Void {
+		
+		Works.removeHTML();
 		
 		var keyword:String = _jKeyword.prop('value');
 		var from   :String = getDateNumber(_jFrom.prop('value'));
