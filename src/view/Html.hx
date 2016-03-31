@@ -30,14 +30,10 @@ class Html {
 		var image:String = '';
 		
 		if (info.url.length > 0) {
+			
 			href = ' href="' + info.url + '" class="link" target="_blank"';
-		}
+			image = '<a' + href + '><img></a>';
 		
-		if (info.image.length > 0) {
-			
-			var imageSRC:String = info.image;
-			image = '<a' + href + '><img src="' + imageSRC + '"></a>';
-			
 		}
 		
 		html += '

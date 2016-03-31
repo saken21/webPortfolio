@@ -34,7 +34,16 @@ class Works {
 		========================================================================== */
 		public static function setHTML(data:DataArray):Void {
 			
-			_jParent.hide().html(Html.get(data)).delay(300).fadeIn(600,All.hideLoading);
+			_jParent.hide().html(Html.get(data)).fadeIn(400,function():Void {
+				
+				All.hideLoading();
+				var jList:JQuery = _jParent.find('li');
+				
+				_jParent.find('li').each(function():Void {
+					setImage(JQuery.cur);
+				});
+				
+			});
 
 		}
 		
@@ -67,6 +76,34 @@ class Works {
 	private static function onResize(event:JqEvent):Void {
 		
 		_jParent.css({ paddingTop:Header.getHeight() + 20 });
+		
+	}
+	
+	/* =======================================================================
+	Set Image
+	========================================================================== */
+	private static function setImage(jParent:JQuery):Void {
+		
+		var id:Int = jParent.data('id');
+		
+		Handy.timer(function():Void {
+			
+			Data.loadImage(id,function(imageSRC:String):Void {
+
+				var jImage:JQuery = jParent.find('.image');
+
+				if (imageSRC.length == 0) {
+
+					jImage.addClass('empty');
+					return;
+
+				}
+
+				jImage.find('img').prop('src',imageSRC).hide().fadeIn(600);
+
+			});
+			
+		},50 * jParent.index());
 		
 	}
 

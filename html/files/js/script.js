@@ -560,6 +560,16 @@ utils.Data.load = function(keyword,from,to) {
 		utils.Data.onLoaded(data);
 	});
 };
+utils.Data.loadImage = function(id,onLoaded) {
+	var params;
+	var _g = new haxe.ds.StringMap();
+	_g.set("id",id == null?"null":"" + id);
+	_g.set("image","true");
+	params = _g;
+	jp.saken.utils.API.getJSON("webResults2",params,function(data) {
+		onLoaded(data[0].image);
+	});
+};
 utils.Data.onLoaded = function(data) {
 	data.reverse();
 	if(data.length > 0) view.Works.setHTML(data); else view.Works.setEmptyHTML();
@@ -604,10 +614,9 @@ view.Html.getWork = function(info) {
 	var html = "<li data-id=\"" + Std.string(info.id) + "\">";
 	var href = "";
 	var image = "";
-	if(info.url.length > 0) href = " href=\"" + Std.string(info.url) + "\" class=\"link\" target=\"_blank\"";
-	if(info.image.length > 0) {
-		var imageSRC = info.image;
-		image = "<a" + href + "><img src=\"" + imageSRC + "\"></a>";
+	if(info.url.length > 0) {
+		href = " href=\"" + Std.string(info.url) + "\" class=\"link\" target=\"_blank\"";
+		image = "<a" + href + "><img></a>";
 	}
 	html += "\n\t\t\n\t\t\t<p class=\"client\">" + Std.string(info.client) + " 様</p>\n\t\t\t<article>\n\t\t\t\t<p class=\"name\">\n\t\t\t\t\t<a" + href + ">" + Std.string(info.name) + "</a>\n\t\t\t\t</p>\n\t\t\t\t<p class=\"image\">" + image + "</p>\n\t\t\t\t<p class=\"note\">" + Std.string(info.note) + "</p>\n\t\t\t\t<p class=\"tag\">" + view.Html.getTags(info.tag.split(",")) + "</p>\n\t\t\t</article>\n\t\t\n\t\t";
 	return html + "</li>";
@@ -675,7 +684,13 @@ view.Works.removeHTML = function() {
 	view.Works._jParent.empty();
 };
 view.Works.setHTML = function(data) {
-	view.Works._jParent.hide().html(view.Html.get(data)).delay(300).fadeIn(600,view.All.hideLoading);
+	view.Works._jParent.hide().html(view.Html.get(data)).fadeIn(400,function() {
+		view.All.hideLoading();
+		var jList = view.Works._jParent.find("li");
+		view.Works._jParent.find("li").each(function() {
+			view.Works.setImage($(this));
+		});
+	});
 };
 view.Works.setEmptyHTML = function() {
 	view.All.hideLoading();
@@ -687,6 +702,19 @@ view.Works.onClick = function(event) {
 };
 view.Works.onResize = function(event) {
 	view.Works._jParent.css({ paddingTop : view.Header.getHeight() + 20});
+};
+view.Works.setImage = function(jParent) {
+	var id = jParent.data("id");
+	jp.saken.utils.Handy.timer(function() {
+		utils.Data.loadImage(id,function(imageSRC) {
+			var jImage = jParent.find(".image");
+			if(imageSRC.length == 0) {
+				jImage.addClass("empty");
+				return;
+			}
+			jImage.find("img").prop("src",imageSRC).hide().fadeIn(600);
+		});
+	},50 * jParent.index());
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;

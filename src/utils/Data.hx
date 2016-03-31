@@ -40,6 +40,19 @@ class Data {
 		
 	}
 	
+		/* =======================================================================
+		Public - Load Image
+		========================================================================== */
+		public static function loadImage(id:Int,onLoaded:String->Void):Void {
+
+			var params:ParamMap = ['id'=>Std.string(id),'image'=>'true'];
+
+			API.getJSON(API_NAME,params,function(data:DataArray):Void {
+				onLoaded(data[0].image);
+			});
+
+		}
+	
 	/* =======================================================================
 	On Loaded
 	========================================================================== */

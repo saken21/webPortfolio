@@ -56,6 +56,11 @@
 			#works ul li .image {
 				overflow:hidden;
 				height:140px;
+				background:#f8f8f8 url(../img/loading.gif) no-repeat center center;
+			}
+			
+			#works ul li .image.empty {
+				background:none;
 			}
 			
 			#works ul li .note {
