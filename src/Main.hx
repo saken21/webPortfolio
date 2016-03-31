@@ -1,11 +1,11 @@
 /**
 * ================================================================================
 *
-* WebPortfolio ver 1.00.00
+* WebPortfolio ver 1.00.01
 *
 * Author : KENTA SAKATA
 * Since  : 2016/03/05
-* Update : 2016/03/29
+* Update : 2016/03/31
 *
 * Licensed under the MIT License
 * Copyright (c) Kenta Sakata
@@ -29,10 +29,10 @@ class Main {
 		
 		new JQuery('document').ready(function(event:JqEvent):Void {
 			
-			Works.init();
-			
-			All.init();
 			Header.init();
+			Works.init();
+			All.init();
+			
 			Searchbox.init();
 			
 		});

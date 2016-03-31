@@ -107,9 +107,9 @@ var Main = function() { };
 Main.__name__ = true;
 Main.main = function() {
 	new js.JQuery("document").ready(function(event) {
+		view.Header.init();
 		view.Works.init();
 		view.All.init();
-		view.Header.init();
 		view.Searchbox.init();
 	});
 };
@@ -292,54 +292,6 @@ haxe.ds.StringMap.prototype = {
 };
 var jp = {};
 jp.saken = {};
-jp.saken.ui = {};
-jp.saken.ui.Lightbox = function() { };
-jp.saken.ui.Lightbox.__name__ = true;
-jp.saken.ui.Lightbox.init = function(cls,jField) {
-	jp.saken.ui.Lightbox.setHTML();
-	jp.saken.ui.Lightbox._jParent = new js.JQuery("#" + "lightbox");
-	jp.saken.ui.Lightbox._jBackground = jp.saken.ui.Lightbox._jParent.find(".bg").css({ opacity : .8});
-	jp.saken.ui.Lightbox._jContent = jp.saken.ui.Lightbox._jParent.find(".content");
-	jp.saken.ui.Lightbox._class = cls;
-	if(jField == null) jField = jp.saken.utils.Dom.jBody;
-	jp.saken.ui.Lightbox._jBackground.add(jp.saken.ui.Lightbox._jParent.find(".close")).on("click",jp.saken.ui.Lightbox.hide);
-	jp.saken.utils.Dom.jWindow.on("resize",jp.saken.ui.Lightbox.resize);
-	jField.on("click",jp.saken.ui.Lightbox.onClick);
-};
-jp.saken.ui.Lightbox.setHTML = function() {
-	var html = "\n\t\t<section id=\"" + "lightbox" + "\">\n\t\t\t<div class=\"bg\" id=\"" + "lightbox" + "-bg\">&nbsp;</div>\n\t\t\t<section class=\"content\" id=\"" + "lightbox" + "-content\"></section>\n\t\t\t<button class=\"close\" id=\"" + "lightbox" + "-close\">×</button>\n\t\t</section>";
-	jp.saken.utils.Dom.jBody.append(html);
-};
-jp.saken.ui.Lightbox.onClick = function(event) {
-	var jTarget = new js.JQuery(event.target);
-	var jAnchor = jTarget.parents(jp.saken.ui.Lightbox._class);
-	if(jAnchor.length == 0) return;
-	var href = jAnchor.prop("href");
-	if(href.length > 0) {
-		jp.saken.ui.Lightbox.show(href);
-		return false;
-	}
-};
-jp.saken.ui.Lightbox.show = function(src) {
-	jp.saken.ui.Lightbox._jContent.empty().css({ width : "", height : ""}).html("<img src=\"" + src + "\">").find("img").on("load",jp.saken.ui.Lightbox.resize);
-	jp.saken.ui.Lightbox._jParent.stop().fadeIn(300);
-};
-jp.saken.ui.Lightbox.hide = function(event) {
-	jp.saken.ui.Lightbox._jParent.stop().fadeOut(300);
-};
-jp.saken.ui.Lightbox.resize = function(event) {
-	var jTarget = jp.saken.ui.Lightbox._jContent.find("img");
-	var jWindow = jp.saken.utils.Dom.jWindow;
-	var winW = jWindow.width();
-	var winH = jWindow.height();
-	var w = jTarget.width();
-	var h = jTarget.height();
-	if(w > winW) w = winW;
-	if(h > winH) h = winH;
-	var x = Math.floor((winW - w) * .5);
-	var y = Math.floor((winH - h) * .5);
-	jp.saken.ui.Lightbox._jContent.css({ left : x, top : y, width : w, height : h});
-};
 jp.saken.utils = {};
 jp.saken.utils.API = function() { };
 jp.saken.utils.API.__name__ = true;
@@ -655,7 +607,7 @@ view.Html.getWork = function(info) {
 	if(info.url.length > 0) href = " href=\"" + Std.string(info.url) + "\" class=\"link\" target=\"_blank\"";
 	if(info.image.length > 0) {
 		var imageSRC = info.image;
-		image = "<a href=\"" + imageSRC + "\" class=\"lightbox\"><img src=\"" + imageSRC + "\"></a>";
+		image = "<a" + href + "><img src=\"" + imageSRC + "\"></a>";
 	}
 	html += "\n\t\t\n\t\t\t<p class=\"client\">" + Std.string(info.client) + " 様</p>\n\t\t\t<article>\n\t\t\t\t<p class=\"name\">\n\t\t\t\t\t<a" + href + ">" + Std.string(info.name) + "</a>\n\t\t\t\t</p>\n\t\t\t\t<p class=\"image\">" + image + "</p>\n\t\t\t\t<p class=\"note\">" + Std.string(info.note) + "</p>\n\t\t\t\t<p class=\"tag\">" + view.Html.getTags(info.tag.split(",")) + "</p>\n\t\t\t</article>\n\t\t\n\t\t";
 	return html + "</li>";
@@ -716,8 +668,7 @@ view.Works = function() { };
 view.Works.__name__ = true;
 view.Works.init = function() {
 	view.Works._jParent = new js.JQuery("#works").on("click",view.Works.onClick);
-	jp.saken.utils.Dom.jWindow.on("resize",view.Works.onResize);
-	jp.saken.ui.Lightbox.init(".lightbox");
+	jp.saken.utils.Dom.jWindow.on("resize",view.Works.onResize).trigger("resize");
 };
 view.Works.removeHTML = function() {
 	view.All.showLoading();
@@ -754,7 +705,6 @@ Array.__name__ = true;
 Date.__name__ = ["Date"];
 var q = window.jQuery;
 js.JQuery = q;
-jp.saken.ui.Lightbox.ID = "lightbox";
 jp.saken.utils.API.PATH = "/api/";
 jp.saken.utils.Dom.document = window.document;
 jp.saken.utils.Dom.window = window;

@@ -36,7 +36,7 @@ class Html {
 		if (info.image.length > 0) {
 			
 			var imageSRC:String = info.image;
-			image = '<a href="' + imageSRC + '" class="lightbox"><img src="' + imageSRC + '"></a>';
+			image = '<a' + href + '><img src="' + imageSRC + '"></a>';
 			
 		}
 		

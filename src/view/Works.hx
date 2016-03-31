@@ -2,7 +2,6 @@ package view;
 
 import js.JQuery;
 import utils.Data;
-import jp.saken.ui.Lightbox;
 import jp.saken.utils.Handy;
 import jp.saken.utils.Dom;
 
@@ -16,9 +15,7 @@ class Works {
 	public static function init():Void {
 		
 		_jParent = new JQuery('#works').on('click',onClick);
-		
-		Dom.jWindow.on('resize',onResize);
-		Lightbox.init('.lightbox');
+		Dom.jWindow.on('resize',onResize).trigger('resize');
 		
 	}
 	
